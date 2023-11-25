@@ -10,6 +10,7 @@ import {
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+// import { BadRequestException, HttpStatus } from '@nestjs/common';
 
 @Controller('movie')
 export class MovieController {
@@ -27,16 +28,16 @@ export class MovieController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.movieService.findOne(+id);
+    return this.movieService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateMovieDto: UpdateMovieDto) {
-    return this.movieService.update(+id, updateMovieDto);
+    return this.movieService.update(id, updateMovieDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.movieService.remove(+id);
+    return this.movieService.remove(id);
   }
 }

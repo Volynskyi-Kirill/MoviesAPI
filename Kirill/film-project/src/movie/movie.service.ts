@@ -1,26 +1,41 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Movie, MovieDocument } from './schemas/movie.schemas';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 
 @Injectable()
 export class MovieService {
-  create(createMovieDto: CreateMovieDto) {
-    return 'This action adds a new movie';
+  constructor(
+    @InjectModel(Movie.name) private movieModel: Model<MovieDocument>,
+  ) {}
+
+  async create(createMovieDto: CreateMovieDto): Promise<Movie> {
+    const createMovie = await this.movieModel.create(createMovieDto);
+    return createMovie;
   }
 
-  findAll() {
-    return ['film 1', 'film 2', 'film 3'];
+  async findAll(): Promise<Movie[]> {
+    return await this.movieModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} movie`;
+  async findOne(id: string): Promise<Movie | null> {
+    return await this.movieModel.findById(id);
   }
 
-  update(id: number, updateMovieDto: UpdateMovieDto) {
-    return `This action updates a #${id} movie`;
+  async update(
+    id: string,
+    updateMovieDto: UpdateMovieDto,
+  ): Promise<Movie | null> {
+    return await this.movieModel.findByIdAndUpdate(id, updateMovieDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} movie`;
+  async remove(id: string): Promise<Movie | null> {
+    return await this.movieModel.findByIdAndDelete(id);
+  }
+
+  async deleteMany(title: string) {
+    return await this.movieModel.deleteMany({ title });
   }
 }
