@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MovieController } from './movie.controller';
 import { MovieService } from './movie.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Movie, MovieSchema } from './schemas/movie.schemas';
+import { Movie, MovieSchema } from './schemas/movie.schema';
 
 describe('MovieController', () => {
   let controller: MovieController;
