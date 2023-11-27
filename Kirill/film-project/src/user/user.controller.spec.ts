@@ -3,6 +3,7 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas/user.schema';
+import { DB_CONNECTION_URL } from '../../config';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -10,7 +11,7 @@ describe('UserController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        MongooseModule.forRoot('mongodb://127.0.0.1:27017/movies'),
+        MongooseModule.forRoot(DB_CONNECTION_URL),
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
       ],
       controllers: [UserController],

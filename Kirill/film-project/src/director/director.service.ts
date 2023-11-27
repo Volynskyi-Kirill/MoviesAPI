@@ -8,31 +8,31 @@ import { UpdateDirectorDto } from './dto/update-director.dto';
 @Injectable()
 export class DirectorService {
   constructor(
-    @InjectModel(Director.name) private movieModel: Model<DirectorDocument>,
+    @InjectModel(Director.name) private directorModel: Model<DirectorDocument>,
   ) {}
   async create(createDirectorDto: CreateDirectorDto) {
-    return await this.movieModel.create(createDirectorDto);
+    return await this.directorModel.create(createDirectorDto);
   }
 
   async findAll() {
-    return await this.movieModel.find();
+    return await this.directorModel.find();
   }
 
   async findOne(id: string) {
-    return await this.movieModel.findById(id);
+    return await this.directorModel.findById(id);
   }
 
   async update(id: string, updateDirectorDto: UpdateDirectorDto) {
-    return await this.movieModel.findByIdAndUpdate(id, updateDirectorDto, {
+    return await this.directorModel.findByIdAndUpdate(id, updateDirectorDto, {
       new: true,
     });
   }
 
   async remove(id: string) {
-    return await this.movieModel.findByIdAndDelete(id);
+    return await this.directorModel.findByIdAndDelete(id);
   }
 
   async deleteByName(name: string) {
-    return await this.movieModel.deleteMany({ name });
+    return await this.directorModel.deleteMany({ name });
   }
 }

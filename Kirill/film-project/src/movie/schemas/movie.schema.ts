@@ -21,9 +21,6 @@ export class Movie {
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Director' }] })
   director: Director[];
-
-  // @Prop()
-  // _id: string;
 }
 
 export const MovieSchema = SchemaFactory.createForClass(Movie);

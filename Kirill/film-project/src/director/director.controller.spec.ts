@@ -3,6 +3,7 @@ import { DirectorController } from './director.controller';
 import { DirectorService } from './director.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Director, DirectorSchema } from './schemas/director.schema';
+import { DB_CONNECTION_URL } from '../../config';
 
 describe('DirectorController', () => {
   let controller: DirectorController;
@@ -10,7 +11,7 @@ describe('DirectorController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        MongooseModule.forRoot('mongodb://127.0.0.1:27017/movies'),
+        MongooseModule.forRoot(DB_CONNECTION_URL),
         MongooseModule.forFeature([
           { name: Director.name, schema: DirectorSchema },
         ]),

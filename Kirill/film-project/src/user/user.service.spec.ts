@@ -8,6 +8,7 @@ import {
   defaultUsername,
   updateUsername,
 } from './fixtures/user.fixture';
+import { DB_CONNECTION_URL } from '../../config';
 
 describe('UserService', () => {
   let service: UserService;
@@ -20,7 +21,7 @@ describe('UserService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        MongooseModule.forRoot('mongodb://127.0.0.1:27017/movies'),
+        MongooseModule.forRoot(DB_CONNECTION_URL),
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
       ],
       providers: [UserService],

@@ -3,6 +3,7 @@ import { GenreController } from './genre.controller';
 import { GenreService } from './genre.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Genre, GenreSchema } from './schemas/genre.schema';
+import { DB_CONNECTION_URL } from '../../config';
 
 describe('GenreController', () => {
   let controller: GenreController;
@@ -10,7 +11,7 @@ describe('GenreController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        MongooseModule.forRoot('mongodb://127.0.0.1:27017/movies'),
+        MongooseModule.forRoot(DB_CONNECTION_URL),
         MongooseModule.forFeature([{ name: Genre.name, schema: GenreSchema }]),
       ],
       controllers: [GenreController],
