@@ -8,6 +8,7 @@ import {
   defaultName,
   updateName,
 } from './fixtures/director.fixture';
+import { DB_CONNECTION_URL } from '../../config';
 
 describe('DirectorService', () => {
   let service: DirectorService;
@@ -20,7 +21,7 @@ describe('DirectorService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        MongooseModule.forRoot('mongodb://127.0.0.1:27017/directors'),
+        MongooseModule.forRoot(DB_CONNECTION_URL),
         MongooseModule.forFeature([
           { name: Director.name, schema: DirectorSchema },
         ]),
