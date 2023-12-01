@@ -4,6 +4,8 @@ export const updateUsername = 'update test username';
 export function createUserDto(username = defaultUsername) {
   return {
     username,
-    mail: 'test@gmail.com',
+    email: 'test@gemail.com',
+    roles: ['user'],
+    password: '1111',
   };
 }

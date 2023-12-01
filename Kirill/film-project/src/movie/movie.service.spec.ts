@@ -44,7 +44,7 @@ describe('MovieService', () => {
     const movieDto = createMovieDto();
     const createdMovie = await service.create(movieDto);
 
-    //TODO сравнения всех полей обьекта в цикле
+    //TODO сравнения всех полей обьекта в цикле (на стриме есть вариант по лучше)
     expect(createdMovie.title).toEqual(movieDto.title);
     expect(createdMovie.year).toEqual(movieDto.year);
     expect(createdMovie.duration).toEqual(movieDto.duration);

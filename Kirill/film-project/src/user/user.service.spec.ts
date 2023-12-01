@@ -40,7 +40,7 @@ describe('UserService', () => {
     const createdUser = await service.create(userDto);
 
     expect(createdUser.username).toEqual(userDto.username);
-    expect(createdUser.mail).toEqual(userDto.mail);
+    expect(createdUser.email).toEqual(userDto.email);
   });
 
   it(`${HTTPMethod.GET}, should return all users`, async () => {

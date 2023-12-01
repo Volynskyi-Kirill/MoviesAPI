@@ -7,6 +7,7 @@ import { GenreModule } from './genre/genre.module';
 import { DirectorModule } from './director/director.module';
 import { UserModule } from './user/user.module';
 import { DB_CONNECTION_URL } from '../config';
+import { AuthorizationModule } from './authorization/authorization.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { DB_CONNECTION_URL } from '../config';
     MovieModule,
     GenreModule,
     DirectorModule,
+    AuthorizationModule,
     UserModule,
   ],
   controllers: [AppController],
