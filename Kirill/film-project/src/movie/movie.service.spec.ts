@@ -1,9 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MovieService } from './movie.service';
+import { AuthorizationService } from '../authorization/authorization.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Movie, MovieSchema } from './schemas/movie.schema';
 import { Genre, GenreSchema } from '../genre/schemas/genre.schema';
 import { Director, DirectorSchema } from '../director/schemas/director.schema';
+import { User, UserSchema } from '../user/schemas/user.schema';
 import { HTTPMethod } from 'http-method-enum';
 import {
   createMovieDto,
@@ -28,9 +30,10 @@ describe('MovieService', () => {
           { name: Movie.name, schema: MovieSchema },
           { name: Genre.name, schema: GenreSchema },
           { name: Director.name, schema: DirectorSchema },
+          { name: User.name, schema: UserSchema },
         ]),
       ],
-      providers: [MovieService],
+      providers: [MovieService, AuthorizationService],
     }).compile();
 
     service = module.get<MovieService>(MovieService);
@@ -44,10 +47,7 @@ describe('MovieService', () => {
     const movieDto = createMovieDto();
     const createdMovie = await service.create(movieDto);
 
-    //TODO сравнения всех полей обьекта в цикле (на стриме есть вариант по лучше)
-    expect(createdMovie.title).toEqual(movieDto.title);
-    expect(createdMovie.year).toEqual(movieDto.year);
-    expect(createdMovie.duration).toEqual(movieDto.duration);
+    expect(createdMovie).toEqual(expect.objectContaining(movieDto));
   });
 
   it(`${HTTPMethod.GET}, should return all movies`, async () => {
