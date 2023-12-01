@@ -1,3 +1,5 @@
+export const DELIMITER = ' ';
+
 export const MOVIE_FIELDS = {
   ID: '_id',
   TITLE: 'title',
@@ -17,6 +19,5 @@ export const USER_FIELDS = {
 export const ERROR_MESSAGE = {
   LOGIN_FAILED: 'check your login or password',
   USER_NOT_FOUND: 'such user does not exist',
+  CHECK_TOKEN: 'check token and permissions',
 };
-
-export const DELIMITER = ' ';

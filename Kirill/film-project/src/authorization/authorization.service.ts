@@ -29,6 +29,13 @@ export class AuthorizationService {
       : ERROR_MESSAGE.LOGIN_FAILED;
   }
 
+  async findUserByToken(email: string, password: string) {
+    return this.userModel.find({
+      [USER_FIELDS.EMAIL]: email,
+      [USER_FIELDS.PASSWORD]: password,
+    });
+  }
+
   findAll() {
     return `This action returns all authorization`;
   }

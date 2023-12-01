@@ -12,7 +12,7 @@ import { MovieService } from './movie.service';
 import { AuthorizationService } from '../authorization/authorization.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
-import { DELIMITER } from '../constants';
+import { ERROR_MESSAGE, DELIMITER } from '../constants';
 
 @Controller('movie')
 export class MovieController {
@@ -27,10 +27,16 @@ export class MovieController {
   }
 
   @Get()
-  findAll(@Headers('authorization') authorizationHeader: string) {
+  async findAll(@Headers('authorization') authorizationHeader: string) {
     const [email, password] = authorizationHeader.split(DELIMITER);
-    const result = this.authorizationService.loginUser({ email, password });
-    console.log('result: ', result);
+
+    const user = await this.authorizationService.findUserByToken(
+      email,
+      password,
+    );
+
+    if (!user.length) throw new Error(ERROR_MESSAGE.CHECK_TOKEN);
+
     return this.movieService.findAll();
   }
 
