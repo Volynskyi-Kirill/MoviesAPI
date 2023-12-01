@@ -39,7 +39,7 @@ describe('GenreService', () => {
     const genreDto = createGenreDto();
     const createdGenre = await service.create(genreDto);
 
-    expect(createdGenre.genre).toEqual(genreDto.genre);
+    expect(createdGenre).toEqual(expect.objectContaining(genreDto));
   });
 
   it(`${HTTPMethod.GET}, should return all genres`, async () => {
@@ -53,7 +53,7 @@ describe('GenreService', () => {
     const genreId = await createAndGetGenreId(genreDto);
     const genre = await service.findOne(genreId);
 
-    expect(genre?.genre).toEqual(genreDto.genre);
+    expect(genre).toEqual(expect.objectContaining(genreDto));
   });
 
   it(`${HTTPMethod.PUT}, should update a genre by id`, async () => {

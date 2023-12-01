@@ -41,8 +41,7 @@ describe('DirectorService', () => {
     const directorDto = createDirectorDto();
     const createdDirector = await service.create(directorDto);
 
-    expect(createdDirector.name).toEqual(directorDto.name);
-    expect(createdDirector.dateOfBirth).toEqual(directorDto.dateOfBirth);
+    expect(createdDirector).toEqual(expect.objectContaining(directorDto));
   });
 
   it(`${HTTPMethod.GET}, should return all directors`, async () => {
@@ -56,7 +55,7 @@ describe('DirectorService', () => {
     const directorId = await createAndGetDirectorId(directorDto);
     const director = await service.findOne(directorId);
 
-    expect(director?.name).toEqual(directorDto.name);
+    expect(director).toEqual(expect.objectContaining(directorDto));
   });
 
   it(`${HTTPMethod.PUT}, should update a director by id`, async () => {

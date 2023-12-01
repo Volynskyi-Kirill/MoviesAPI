@@ -39,8 +39,7 @@ describe('UserService', () => {
     const userDto = createUserDto();
     const createdUser = await service.create(userDto);
 
-    expect(createdUser.username).toEqual(userDto.username);
-    expect(createdUser.email).toEqual(userDto.email);
+    expect(createdUser).toEqual(expect.objectContaining(userDto));
   });
 
   it(`${HTTPMethod.GET}, should return all users`, async () => {
@@ -54,7 +53,7 @@ describe('UserService', () => {
     const userId = await createAndGetUserId(userDto);
     const user = await service.findOne(userId);
 
-    expect(user?.username).toEqual(userDto.username);
+    expect(user).toEqual(expect.objectContaining(userDto));
   });
 
   it(`${HTTPMethod.PUT}, should update a user by id`, async () => {

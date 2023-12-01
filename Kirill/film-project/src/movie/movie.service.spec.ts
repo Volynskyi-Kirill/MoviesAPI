@@ -61,7 +61,7 @@ describe('MovieService', () => {
     const movieId = await createAndGetMovieId(movieDto);
     const movie = await service.findOne(movieId);
 
-    expect(movie?.title).toEqual(movieDto.title);
+    expect(movie).toEqual(expect.objectContaining(movieDto));
   });
 
   it(`${HTTPMethod.PUT}, should update a movie by id`, async () => {
