@@ -4,6 +4,9 @@ import { UserService } from './user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas/user.schema';
 import { DB_CONNECTION_URL } from '../../config';
+import { AuthorizationService } from '../authorization/authorization.service';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config/dist';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -15,7 +18,7 @@ describe('UserController', () => {
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
       ],
       controllers: [UserController],
-      providers: [UserService],
+      providers: [UserService, AuthorizationService, JwtService, ConfigService],
     }).compile();
 
     controller = module.get<UserController>(UserController);

@@ -1,8 +1,11 @@
+import { AuthorizationService } from '../authorization/authorization.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas/user.schema';
 import { HTTPMethod } from 'http-method-enum';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config/dist';
 import {
   createUserDto,
   defaultUsername,
@@ -12,9 +15,12 @@ import { DB_CONNECTION_URL } from '../../config';
 
 describe('UserService', () => {
   let service: UserService;
+  let authorizationService: AuthorizationService;
 
   async function createAndGetUserId(userDto = createUserDto()) {
-    const createdUser = await service.create(userDto);
+    const token = authorizationService.generateToken(userDto.email);
+
+    const createdUser = await service.create(userDto, token);
     return createdUser._id.toString();
   }
 
@@ -24,10 +30,12 @@ describe('UserService', () => {
         MongooseModule.forRoot(DB_CONNECTION_URL),
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
       ],
-      providers: [UserService],
+      providers: [UserService, AuthorizationService, JwtService, ConfigService],
     }).compile();
 
     service = module.get<UserService>(UserService);
+    authorizationService =
+      module.get<AuthorizationService>(AuthorizationService);
   });
 
   afterEach(async () => {
@@ -37,7 +45,8 @@ describe('UserService', () => {
 
   it(`${HTTPMethod.POST}, should create a user`, async () => {
     const userDto = createUserDto();
-    const createdUser = await service.create(userDto);
+    const token = authorizationService.generateToken(userDto.email);
+    const createdUser = await service.create(userDto, token);
 
     expect(createdUser).toEqual(expect.objectContaining(userDto));
   });

@@ -3,6 +3,8 @@ import { MovieService } from './movie.service';
 import { AuthorizationService } from '../authorization/authorization.service';
 import { MovieController } from './movie.controller';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { Movie, MovieSchema } from './schemas/movie.schema';
 import { Genre, GenreSchema } from '../genre/schemas/genre.schema';
 import { Director, DirectorSchema } from '../director/schemas/director.schema';
@@ -18,6 +20,6 @@ import { User, UserSchema } from '../user/schemas/user.schema';
     ]),
   ],
   controllers: [MovieController],
-  providers: [MovieService, AuthorizationService],
+  providers: [MovieService, AuthorizationService, JwtService, ConfigService],
 })
 export class MovieModule {}

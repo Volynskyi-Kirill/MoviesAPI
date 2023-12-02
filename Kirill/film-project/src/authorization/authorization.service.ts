@@ -1,3 +1,5 @@
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -8,10 +10,19 @@ import { USER_FIELDS, ERROR_MESSAGE } from '../constants';
 
 @Injectable()
 export class AuthorizationService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
 
   create(createAuthorizationDto: CreateAuthorizationDto) {
     return 'This action adds a new authorization';
+  }
+
+  generateToken(email: string) {
+    const secret = this.configService.get('JWT_SECRET');
+    return this.jwtService.sign({ email }, { secret });
   }
 
   async loginUser(createAuthorizationDto: CreateAuthorizationDto) {

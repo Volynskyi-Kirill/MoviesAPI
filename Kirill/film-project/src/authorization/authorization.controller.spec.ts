@@ -4,6 +4,11 @@ import { AuthorizationController } from './authorization.controller';
 import { AuthorizationService } from './authorization.service';
 import { User, UserSchema } from '../user/schemas/user.schema';
 import { DB_CONNECTION_URL } from '../../config';
+import { PassportModule } from '@nestjs/passport/dist';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtStrategy } from './jwt.strategy';
+import { ConfigService } from '@nestjs/config';
+import { UserService } from '../user/user.service';
 
 describe('AuthorizationController', () => {
   let controller: AuthorizationController;
@@ -13,9 +18,17 @@ describe('AuthorizationController', () => {
       imports: [
         MongooseModule.forRoot(DB_CONNECTION_URL),
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+        PassportModule,
+        JwtModule,
       ],
       controllers: [AuthorizationController],
-      providers: [AuthorizationService],
+      providers: [
+        AuthorizationService,
+        JwtService,
+        JwtStrategy,
+        ConfigService,
+        UserService,
+      ],
     }).compile();
 
     controller = module.get<AuthorizationController>(AuthorizationController);

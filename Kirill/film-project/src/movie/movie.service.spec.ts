@@ -6,6 +6,8 @@ import { Movie, MovieSchema } from './schemas/movie.schema';
 import { Genre, GenreSchema } from '../genre/schemas/genre.schema';
 import { Director, DirectorSchema } from '../director/schemas/director.schema';
 import { User, UserSchema } from '../user/schemas/user.schema';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { HTTPMethod } from 'http-method-enum';
 import {
   createMovieDto,
@@ -33,7 +35,12 @@ describe('MovieService', () => {
           { name: User.name, schema: UserSchema },
         ]),
       ],
-      providers: [MovieService, AuthorizationService],
+      providers: [
+        MovieService,
+        AuthorizationService,
+        JwtService,
+        ConfigService,
+      ],
     }).compile();
 
     service = module.get<MovieService>(MovieService);

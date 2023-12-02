@@ -1,8 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongooseModule } from '@nestjs/mongoose';
+import { PassportModule } from '@nestjs/passport/dist';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AuthorizationService } from './authorization.service';
 import { User, UserSchema } from '../user/schemas/user.schema';
 import { DB_CONNECTION_URL } from '../../config';
+import { JwtStrategy } from './jwt.strategy';
+import { ConfigService } from '@nestjs/config';
+import { UserService } from '../user/user.service';
 
 describe('AuthorizationService', () => {
   let service: AuthorizationService;
@@ -12,8 +17,16 @@ describe('AuthorizationService', () => {
       imports: [
         MongooseModule.forRoot(DB_CONNECTION_URL),
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+        PassportModule,
+        JwtModule,
       ],
-      providers: [AuthorizationService],
+      providers: [
+        AuthorizationService,
+        JwtService,
+        JwtStrategy,
+        ConfigService,
+        UserService,
+      ],
     }).compile();
 
     service = module.get<AuthorizationService>(AuthorizationService);

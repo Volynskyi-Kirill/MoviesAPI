@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -12,6 +13,9 @@ import { AuthorizationModule } from './authorization/authorization.module';
 @Module({
   imports: [
     MongooseModule.forRoot(DB_CONNECTION_URL),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     MovieModule,
     GenreModule,
     DirectorModule,
