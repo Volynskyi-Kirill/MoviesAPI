@@ -6,15 +6,15 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
   Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthorizationService } from '../authorization/authorization.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthGuard } from '@nestjs/passport';
+import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
 import { Request } from 'express';
+import { Public } from '../decorators/public.decorator';
 
 @Controller('user')
 export class UserController {
@@ -23,6 +23,7 @@ export class UserController {
     private readonly authorizationService: AuthorizationService,
   ) {}
 
+  @Public()
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const token = await this.authorizationService.generateToken(
@@ -31,7 +32,6 @@ export class UserController {
     return this.userService.create(createUserDto, token);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('/me')
   me(@Req() req: Request) {
     const { user } = req;
@@ -51,6 +51,14 @@ export class UserController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
+  }
+
+  @Patch(':id/profile')
+  updateProfile(
+    @Param('id') id: string,
+    @Body() updateUserProfileDto: UpdateUserProfileDto,
+  ) {
+    return this.userService.updateProfile(id, updateUserProfileDto);
   }
 
   @Delete(':id')

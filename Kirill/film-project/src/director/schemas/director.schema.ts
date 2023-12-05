@@ -5,7 +5,7 @@ export type DirectorDocument = HydratedDocument<Director>;
 
 @Schema()
 export class Director {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   name: string;
 
   @Prop({ required: true })

@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { MovieService } from './movie.service';
-import { AuthorizationService } from '../authorization/authorization.service';
 import { MovieController } from './movie.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
@@ -20,6 +19,6 @@ import { User, UserSchema } from '../user/schemas/user.schema';
     ]),
   ],
   controllers: [MovieController],
-  providers: [MovieService, AuthorizationService, JwtService, ConfigService],
+  providers: [MovieService, JwtService, ConfigService],
 })
 export class MovieModule {}

@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
 
 @Injectable()
 export class UserService {
@@ -28,6 +29,12 @@ export class UserService {
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     return await this.userModel.findByIdAndUpdate(id, updateUserDto, {
+      new: true,
+    });
+  }
+
+  async updateProfile(id: string, updateUserProfileDto: UpdateUserProfileDto) {
+    return await this.userModel.findByIdAndUpdate(id, updateUserProfileDto, {
       new: true,
     });
   }

@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -9,6 +10,12 @@ import { DirectorModule } from './director/director.module';
 import { UserModule } from './user/user.module';
 import { DB_CONNECTION_URL } from '../config';
 import { AuthorizationModule } from './authorization/authorization.module';
+import { JwtGuard } from './authorization/guards/jwt.guard';
+
+const globalGuard = {
+  provide: APP_GUARD,
+  useClass: JwtGuard,
+};
 
 @Module({
   imports: [
@@ -23,6 +30,6 @@ import { AuthorizationModule } from './authorization/authorization.module';
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, globalGuard],
 })
 export class AppModule {}

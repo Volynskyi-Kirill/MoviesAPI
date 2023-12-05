@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MovieController } from './movie.controller';
 import { MovieService } from './movie.service';
-import { AuthorizationService } from '../authorization/authorization.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -28,7 +27,6 @@ describe('MovieController', () => {
       controllers: [MovieController],
       providers: [
         MovieService,
-        AuthorizationService,
         JwtService,
         ConfigService,
       ],

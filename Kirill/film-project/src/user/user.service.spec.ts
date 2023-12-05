@@ -19,8 +19,8 @@ describe('UserService', () => {
 
   async function createAndGetUserId(userDto = createUserDto()) {
     const token = authorizationService.generateToken(userDto.email);
-
     const createdUser = await service.create(userDto, token);
+
     return createdUser._id.toString();
   }
 
@@ -65,9 +65,18 @@ describe('UserService', () => {
     expect(user).toEqual(expect.objectContaining(userDto));
   });
 
-  it(`${HTTPMethod.PUT}, should update a user by id`, async () => {
+  it(`${HTTPMethod.PATCH}, should update a user by id`, async () => {
     const userId = await createAndGetUserId();
     const user = await service.update(userId, {
+      username: updateUsername,
+    });
+
+    expect(user?.username).toEqual(updateUsername);
+  });
+
+  it(`${HTTPMethod.PATCH}, should update a user profile by id`, async () => {
+    const userId = await createAndGetUserId();
+    const user = await service.updateProfile(userId, {
       username: updateUsername,
     });
 
