@@ -6,7 +6,7 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from '../user/schemas/user.schema';
 import { CreateAuthorizationDto } from './dto/create-authorization.dto';
 import { UpdateAuthorizationDto } from './dto/update-authorization.dto';
-import { USER_FIELDS, ERROR_MESSAGE } from '../constants';
+import { USER_FIELDS, ERROR_MESSAGE } from '../utils/constants';
 
 @Injectable()
 export class AuthorizationService {

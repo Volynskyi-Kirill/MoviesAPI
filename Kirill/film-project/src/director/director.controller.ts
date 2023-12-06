@@ -10,11 +10,14 @@ import {
 import { DirectorService } from './director.service';
 import { CreateDirectorDto } from './dto/create-director.dto';
 import { UpdateDirectorDto } from './dto/update-director.dto';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../utils/roles.enum';
 
 @Controller('director')
 export class DirectorController {
   constructor(private readonly directorService: DirectorService) {}
 
+  @Roles(Role.Admin)
   @Post()
   create(@Body() createDirectorDto: CreateDirectorDto) {
     return this.directorService.create(createDirectorDto);
@@ -30,6 +33,7 @@ export class DirectorController {
     return this.directorService.findOne(id);
   }
 
+  @Roles(Role.Admin)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -38,6 +42,7 @@ export class DirectorController {
     return this.directorService.update(id, updateDirectorDto);
   }
 
+  @Roles(Role.Admin)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.directorService.remove(id);

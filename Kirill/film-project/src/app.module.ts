@@ -11,11 +11,17 @@ import { UserModule } from './user/user.module';
 import { DB_CONNECTION_URL } from '../config';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { JwtGuard } from './authorization/guards/jwt.guard';
+import { RolesGuard } from './authorization/guards/roles.guard';
 import { PlaylistModule } from './playlist/playlist.module';
 
-const globalGuard = {
+const jwtGuard = {
   provide: APP_GUARD,
   useClass: JwtGuard,
+};
+
+const rolesGuard = {
+  provide: APP_GUARD,
+  useClass: RolesGuard,
 };
 
 @Module({
@@ -32,6 +38,6 @@ const globalGuard = {
     PlaylistModule,
   ],
   controllers: [AppController],
-  providers: [AppService, globalGuard],
+  providers: [AppService, jwtGuard, rolesGuard],
 })
 export class AppModule {}
