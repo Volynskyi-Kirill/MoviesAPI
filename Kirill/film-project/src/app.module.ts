@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module';
 import { DB_CONNECTION_URL } from '../config';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { JwtGuard } from './authorization/guards/jwt.guard';
+import { PlaylistModule } from './playlist/playlist.module';
 
 const globalGuard = {
   provide: APP_GUARD,
@@ -28,6 +29,7 @@ const globalGuard = {
     DirectorModule,
     AuthorizationModule,
     UserModule,
+    PlaylistModule,
   ],
   controllers: [AppController],
   providers: [AppService, globalGuard],

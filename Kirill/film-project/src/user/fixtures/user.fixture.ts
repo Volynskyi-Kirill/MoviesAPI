@@ -7,5 +7,6 @@ export function createUserDto(username = defaultUsername) {
     email: 'test@gemail.com',
     roles: ['user'],
     password: '1111',
+    playlist: [],
   };
 }
