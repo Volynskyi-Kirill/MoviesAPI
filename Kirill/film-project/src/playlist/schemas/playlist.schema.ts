@@ -13,11 +13,15 @@ export class Playlist {
 
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }],
-    unique: true,
+    required: true,
   })
   movies: Movie[];
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  })
   created: User;
 
   @Prop({

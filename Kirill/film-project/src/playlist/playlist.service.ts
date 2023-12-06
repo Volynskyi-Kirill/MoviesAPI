@@ -1,26 +1,38 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
+import { Playlist, PlaylistDocument } from './schemas/playlist.schema';
 
 @Injectable()
 export class PlaylistService {
-  create(createPlaylistDto: CreatePlaylistDto) {
-    return 'This action adds a new playlist';
+  constructor(
+    @InjectModel(Playlist.name) private playlistModel: Model<PlaylistDocument>,
+  ) {}
+  async create(createPlaylistDto: CreatePlaylistDto) {
+    return await this.playlistModel.create(createPlaylistDto);
   }
 
-  findAll() {
-    return `This action returns all playlist`;
+  async findAll() {
+    return await this.playlistModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} playlist`;
+  async findOne(id: string) {
+    return await this.playlistModel.findById(id);
   }
 
-  update(id: number, updatePlaylistDto: UpdatePlaylistDto) {
-    return `This action updates a #${id} playlist`;
+  async update(id: string, updatePlaylistDto: UpdatePlaylistDto) {
+    return await this.playlistModel.findByIdAndUpdate(id, updatePlaylistDto, {
+      new: true,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} playlist`;
+  async remove(id: string) {
+    return await this.playlistModel.findByIdAndDelete(id);
+  }
+
+  async deleteByPlaylist(title: string) {
+    return await this.playlistModel.deleteMany({ title });
   }
 }
