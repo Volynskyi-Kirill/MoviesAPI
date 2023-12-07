@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -27,12 +27,13 @@ export class UserService {
     return await this.userModel.find({ email });
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string | ObjectId, updateUserDto: UpdateUserDto) {
     return await this.userModel.findByIdAndUpdate(id, updateUserDto, {
       new: true,
     });
   }
 
+  //TODO оставить только update, сделать сервис для обновления roles для админов
   async updateProfile(id: string, updateUserProfileDto: UpdateUserProfileDto) {
     return await this.userModel.findByIdAndUpdate(id, updateUserProfileDto, {
       new: true,

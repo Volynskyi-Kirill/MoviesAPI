@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PlaylistService } from './playlist.service';
+import { UserService } from '../user/user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Playlist, PlaylistSchema } from './schemas/playlist.schema';
 import { DB_CONNECTION_URL } from '../../config';
@@ -15,7 +16,7 @@ describe('PlaylistService', () => {
           { name: Playlist.name, schema: PlaylistSchema },
         ]),
       ],
-      providers: [PlaylistService],
+      providers: [PlaylistService, UserService],
     }).compile();
 
     service = module.get<PlaylistService>(PlaylistService);

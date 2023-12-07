@@ -8,17 +8,26 @@ import {
   Delete,
 } from '@nestjs/common';
 import { PlaylistService } from './playlist.service';
+import { UserService } from '../user/user.service';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 
 @Controller('playlist')
 export class PlaylistController {
-  constructor(private readonly playlistService: PlaylistService) {}
+  constructor(
+    private readonly playlistService: PlaylistService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post()
   async create(@Body() createPlaylistDto: CreatePlaylistDto) {
+    const userId = createPlaylistDto.created;
+
     const playlist = await this.playlistService.create(createPlaylistDto);
-    console.log('playlist: ', playlist);
+    const playlistId = playlist._id;
+
+    const result = await this.userService.update(userId, { playlist: [playlistId] });
+    console.log('result: ', result);
     return playlist;
     // return this.playlistService.create(createPlaylistDto);
   }
