@@ -14,6 +14,14 @@ export const USER_FIELDS = {
   USERNAME: 'username',
   Role: 'roles',
   PASSWORD: 'password',
+  PLAYLIST: 'playlist',
+};
+
+export const PLAYLIST_FIELDS = {
+  TITLE: 'title',
+  MOVIES: 'movies',
+  CREATED: 'created',
+  VISIBILITY: 'visibility',
 };
 
 export const ERROR_MESSAGE = {

@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
+import { USER_FIELDS } from '../utils/constants';
 
 @Injectable()
 export class UserService {
@@ -27,9 +28,15 @@ export class UserService {
     return await this.userModel.find({ email });
   }
 
-  async update(id: string | ObjectId, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto) {
     return await this.userModel.findByIdAndUpdate(id, updateUserDto, {
       new: true,
+    });
+  }
+
+  async addPlaylist(id: string, playlistId: string) {
+    return await this.userModel.findByIdAndUpdate(id, {
+      $push: { [USER_FIELDS.PLAYLIST]: playlistId },
     });
   }
 
@@ -42,6 +49,12 @@ export class UserService {
 
   async remove(id: string) {
     return await this.userModel.findByIdAndDelete(id);
+  }
+
+  async deletePlaylist(id: string, playlistId: string) {
+    return await this.userModel.findByIdAndUpdate(id, {
+      $pull: { [USER_FIELDS.PLAYLIST]: playlistId },
+    });
   }
 
   async deleteByUsername(username: string) {

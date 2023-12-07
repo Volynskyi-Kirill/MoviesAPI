@@ -3,7 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
+import { AddMoviePlaylistDto } from './dto/add-movie-playlist.dto';
+import { DeleteMoviePlaylistDto } from './dto/delete-movie-playlist.dto';
 import { Playlist, PlaylistDocument } from './schemas/playlist.schema';
+import { PLAYLIST_FIELDS } from '../utils/constants';
 
 @Injectable()
 export class PlaylistService {
@@ -25,6 +28,23 @@ export class PlaylistService {
   async update(id: string, updatePlaylistDto: UpdatePlaylistDto) {
     return await this.playlistModel.findByIdAndUpdate(id, updatePlaylistDto, {
       new: true,
+    });
+  }
+
+  async addMovie(playlistId: string, addMoviePlaylistDto: AddMoviePlaylistDto) {
+    const movieId = addMoviePlaylistDto.movies;
+    await this.playlistModel.findByIdAndUpdate(playlistId, {
+      $addToSet: { [PLAYLIST_FIELDS.MOVIES]: movieId },
+    });
+  }
+
+  async deleteMovie(
+    playlistId: string,
+    deleteMoviePlaylistDto: DeleteMoviePlaylistDto,
+  ) {
+    const movieId = deleteMoviePlaylistDto.movies;
+    return await this.playlistModel.findByIdAndUpdate(playlistId, {
+      $pull: { [PLAYLIST_FIELDS.MOVIES]: movieId },
     });
   }
 

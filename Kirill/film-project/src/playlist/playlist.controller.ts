@@ -11,6 +11,8 @@ import { PlaylistService } from './playlist.service';
 import { UserService } from '../user/user.service';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
+import { AddMoviePlaylistDto } from './dto/add-movie-playlist.dto';
+import { DeleteMoviePlaylistDto } from './dto/delete-movie-playlist.dto';
 
 @Controller('playlist')
 export class PlaylistController {
@@ -24,12 +26,11 @@ export class PlaylistController {
     const userId = createPlaylistDto.created;
 
     const playlist = await this.playlistService.create(createPlaylistDto);
-    const playlistId = playlist._id;
 
-    const result = await this.userService.update(userId, { playlist: [playlistId] });
-    console.log('result: ', result);
+    const playlistId = playlist._id;
+    await this.userService.addPlaylist(userId, String(playlistId));
+
     return playlist;
-    // return this.playlistService.create(createPlaylistDto);
   }
 
   @Get()
@@ -50,8 +51,26 @@ export class PlaylistController {
     return this.playlistService.update(id, updatePlaylistDto);
   }
 
+  @Patch(':id/add')
+  addMovie(
+    @Param('id') id: string,
+    @Body() addMoviePlaylistDto: AddMoviePlaylistDto,
+  ) {
+    return this.playlistService.addMovie(id, addMoviePlaylistDto);
+  }
+
+  @Patch(':id/delete')
+  deleteMovie(
+    @Param('id') id: string,
+    @Body() deleteMoviePlaylistDto: DeleteMoviePlaylistDto,
+  ) {
+    return this.playlistService.deleteMovie(id, deleteMoviePlaylistDto);
+  }
+
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.playlistService.remove(id);
+  async remove(@Param('id') id: string) {
+    const user = await this.playlistService.findOne(id);
+    await this.userService.deletePlaylist(String(user?.created), id);
+    return await this.playlistService.remove(id);
   }
 }
