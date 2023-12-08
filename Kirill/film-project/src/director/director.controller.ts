@@ -12,7 +12,10 @@ import { CreateDirectorDto } from './dto/create-director.dto';
 import { UpdateDirectorDto } from './dto/update-director.dto';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../utils/roles.enum';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('director')
 @Controller('director')
 export class DirectorController {
   constructor(private readonly directorService: DirectorService) {}

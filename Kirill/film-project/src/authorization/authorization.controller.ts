@@ -12,7 +12,10 @@ import {
 import { AuthorizationService } from './authorization.service';
 import { CreateAuthorizationDto } from './dto/create-authorization.dto';
 import { UpdateAuthorizationDto } from './dto/update-authorization.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('user/login')
 @Controller('user/login')
 export class AuthorizationController {
   constructor(private readonly authorizationService: AuthorizationService) {}

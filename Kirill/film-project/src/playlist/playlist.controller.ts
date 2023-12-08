@@ -13,7 +13,10 @@ import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { AddMoviePlaylistDto } from './dto/add-movie-playlist.dto';
 import { DeleteMoviePlaylistDto } from './dto/delete-movie-playlist.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('playlist')
 @Controller('playlist')
 export class PlaylistController {
   constructor(

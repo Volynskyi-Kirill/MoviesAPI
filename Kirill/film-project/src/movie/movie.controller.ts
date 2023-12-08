@@ -12,7 +12,11 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../utils/roles.enum';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+
+@ApiBearerAuth()
+@ApiTags('movie')
 @Controller('movie')
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
