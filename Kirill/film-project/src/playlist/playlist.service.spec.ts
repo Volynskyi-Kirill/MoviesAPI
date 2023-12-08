@@ -3,6 +3,7 @@ import { PlaylistService } from './playlist.service';
 import { UserService } from '../user/user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Playlist, PlaylistSchema } from './schemas/playlist.schema';
+import { User, UserSchema } from '../user/schemas/user.schema';
 import { DB_CONNECTION_URL } from '../../config';
 
 describe('PlaylistService', () => {
@@ -14,6 +15,7 @@ describe('PlaylistService', () => {
         MongooseModule.forRoot(DB_CONNECTION_URL),
         MongooseModule.forFeature([
           { name: Playlist.name, schema: PlaylistSchema },
+          { name: User.name, schema: UserSchema },
         ]),
       ],
       providers: [PlaylistService, UserService],

@@ -12,6 +12,7 @@ import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../utils/roles.enum';
+import { Public } from '../decorators/public.decorator';
 
 @Controller('genre')
 export class GenreController {
@@ -23,6 +24,7 @@ export class GenreController {
     return this.genreService.create(createGenreDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.genreService.findAll();

@@ -51,7 +51,7 @@ export class PlaylistController {
     return this.playlistService.update(id, updatePlaylistDto);
   }
 
-  @Patch(':id/add')
+  @Post(':id/movies')
   addMovie(
     @Param('id') id: string,
     @Body() addMoviePlaylistDto: AddMoviePlaylistDto,
@@ -59,7 +59,7 @@ export class PlaylistController {
     return this.playlistService.addMovie(id, addMoviePlaylistDto);
   }
 
-  @Patch(':id/delete')
+  @Delete(':id/movies')
   deleteMovie(
     @Param('id') id: string,
     @Body() deleteMoviePlaylistDto: DeleteMoviePlaylistDto,

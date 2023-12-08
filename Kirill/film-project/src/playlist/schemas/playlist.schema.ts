@@ -25,7 +25,7 @@ export class Playlist {
   created: User;
 
   @Prop({
-    type: [{ type: String, enum: Object.values(VISIBILITY_OPTIONS) }],
+    type: String, enum: Object.values(VISIBILITY_OPTIONS),
     default: VISIBILITY_OPTIONS.PRIVATE,
   })
   visibility: string;
