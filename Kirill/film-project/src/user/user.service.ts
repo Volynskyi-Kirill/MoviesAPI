@@ -40,7 +40,6 @@ export class UserService {
     });
   }
 
-  //TODO оставить только update, сделать сервис для обновления roles для админов
   async updateProfile(id: string, updateUserProfileDto: UpdateUserProfileDto) {
     return await this.userModel.findByIdAndUpdate(id, updateUserProfileDto, {
       new: true,
