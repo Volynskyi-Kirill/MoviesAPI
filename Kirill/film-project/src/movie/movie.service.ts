@@ -19,6 +19,17 @@ export class MovieService {
     @InjectModel(Director.name) private directorModel: Model<DirectorDocument>,
   ) {}
 
+  POPULATE_PARAMS = {
+    GENRE: {
+      path: MOVIE_FIELDS.GENRE,
+      model: this.genreModel,
+    },
+    DIRECTOR: {
+      path: MOVIE_FIELDS.DIRECTOR,
+      model: this.directorModel,
+    },
+  };
+
   async create(createMovieDto: CreateMovieDto) {
     return await this.movieModel.create(createMovieDto);
   }
@@ -26,15 +37,19 @@ export class MovieService {
   async findAll() {
     return await this.movieModel
       .find()
-      .populate({ path: MOVIE_FIELDS.GENRE, model: this.genreModel })
-      .populate({ path: MOVIE_FIELDS.DIRECTOR, model: this.directorModel });
+      .populate(this.POPULATE_PARAMS.GENRE)
+      .populate(this.POPULATE_PARAMS.DIRECTOR);
+  }
+
+  async findMoviesTitle() {
+    return await this.movieModel.find({}, { [MOVIE_FIELDS.TITLE]: 1 });
   }
 
   async findOne(id: string) {
     return await this.movieModel
       .findById(id)
-      .populate({ path: MOVIE_FIELDS.GENRE, model: this.genreModel })
-      .populate({ path: MOVIE_FIELDS.DIRECTOR, model: this.directorModel });
+      .populate(this.POPULATE_PARAMS.GENRE)
+      .populate(this.POPULATE_PARAMS.DIRECTOR);
   }
 
   async update(id: string, updateMovieDto: UpdateMovieDto) {
