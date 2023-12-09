@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Movie } from '../../movie/schemas/movie.schema';
 import { User } from '../../user/schemas/user.schema';
-import { VISIBILITY_OPTIONS } from '../playlist.constants';
+import { VISIBILITY_OPTIONS } from '../../utils/constants';
 
 export type PlaylistDocument = HydratedDocument<Playlist>;
 
@@ -20,12 +20,12 @@ export class Playlist {
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
   })
-  created: User;
+  createdBy: User;
 
   @Prop({
-    type: String, enum: Object.values(VISIBILITY_OPTIONS),
+    type: String,
+    enum: Object.values(VISIBILITY_OPTIONS),
     default: VISIBILITY_OPTIONS.PRIVATE,
   })
   visibility: string;

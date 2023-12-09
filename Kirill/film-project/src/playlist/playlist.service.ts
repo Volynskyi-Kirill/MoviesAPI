@@ -6,7 +6,18 @@ import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { AddMoviePlaylistDto } from './dto/add-movie-playlist.dto';
 import { DeleteMoviePlaylistDto } from './dto/delete-movie-playlist.dto';
 import { Playlist, PlaylistDocument } from './schemas/playlist.schema';
-import { PLAYLIST_FIELDS } from '../utils/constants';
+import {
+  PLAYLIST_FIELDS,
+  VISIBILITY_OPTIONS,
+  USER_FIELDS,
+} from '../utils/constants';
+
+const POPULATE_PARAMS = {
+  CREATED_BY: {
+    path: PLAYLIST_FIELDS.CREATED_BY,
+    select: `${USER_FIELDS.EMAIL} ${USER_FIELDS.USERNAME} -${USER_FIELDS.ID}`,
+  },
+};
 
 @Injectable()
 export class PlaylistService {
@@ -18,11 +29,29 @@ export class PlaylistService {
   }
 
   async findAll() {
-    return await this.playlistModel.find();
+    return await this.playlistModel.find().populate(POPULATE_PARAMS.CREATED_BY);
+  }
+
+  async findPublic() {
+    return await this.playlistModel
+      .find({
+        [PLAYLIST_FIELDS.VISIBILITY]: VISIBILITY_OPTIONS.PUBLIC,
+      })
+      .populate(POPULATE_PARAMS.CREATED_BY);
+  }
+
+  async findByUser(createdBy: string) {
+    return await this.playlistModel
+      .find({
+        [PLAYLIST_FIELDS.CREATED_BY]: createdBy,
+      })
+      .populate(POPULATE_PARAMS.CREATED_BY);
   }
 
   async findOne(id: string) {
-    return await this.playlistModel.findById(id);
+    return await this.playlistModel
+      .findById(id)
+      .populate(POPULATE_PARAMS.CREATED_BY);
   }
 
   async update(id: string, updatePlaylistDto: UpdatePlaylistDto) {

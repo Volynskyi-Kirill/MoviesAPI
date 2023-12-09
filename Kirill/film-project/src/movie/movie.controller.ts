@@ -11,9 +11,8 @@ import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Roles } from '../decorators/roles.decorator';
-import { Role } from '../utils/roles.enum';
+import { Role } from '../utils/enum';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-
 
 @ApiBearerAuth()
 @ApiTags('movie')

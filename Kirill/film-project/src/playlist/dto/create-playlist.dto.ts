@@ -5,8 +5,8 @@ export class CreatePlaylistDto {
   title: string;
   @ApiProperty()
   movies: string[];
-  @ApiProperty()
-  created: string;
-  @ApiProperty()
-  visibility: string;
+  @ApiProperty({ required: false })
+  createdBy: string;
+  @ApiProperty({ required: false })
+  visibility?: string;
 }

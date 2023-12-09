@@ -11,7 +11,7 @@ import { GenreService } from './genre.service';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { Roles } from '../decorators/roles.decorator';
-import { Role } from '../utils/roles.enum';
+import { Role } from '../utils/enum';
 import { Public } from '../decorators/public.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
