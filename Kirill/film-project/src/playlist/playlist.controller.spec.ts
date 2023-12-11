@@ -6,7 +6,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   Playlist,
   PlaylistSchema,
-  PlaylistDocument,
 } from './schemas/playlist.schema';
 import { User, UserSchema } from '../user/schemas/user.schema';
 import { DB_CONNECTION_URL } from '../../config';
@@ -30,6 +29,7 @@ describe('PlaylistController', () => {
     }).compile();
 
     controller = module.get<PlaylistController>(PlaylistController);
+    service = module.get<PlaylistService>(PlaylistService);
   });
 
   it('should be defined', () => {
@@ -38,8 +38,18 @@ describe('PlaylistController', () => {
 
   describe('findPublic', () => {
     it(`${HTTPMethod.GET}, should return public playlist`, async () => {
-      const result = ['test'];
-      jest.spyOn(service, 'findPublic').mockImplementation(() => result);
+      const result = [
+        {
+          _id: '65737124524ee19dfa37ba9e',
+          title: 'плейлист 1',
+          movies: ['6564b655f92cc1aeb84e5dea', '6564b663f92cc1aeb84e5dec'],
+          createdBy: '65705c0906526fd8ef0eba13',
+          visibility: 'public',
+          __v: 0,
+        },
+      ];
+
+      jest.spyOn(service, 'findPublic').mockImplementation(() => result as any);
 
       expect(await controller.findPublic()).toBe(result);
     });

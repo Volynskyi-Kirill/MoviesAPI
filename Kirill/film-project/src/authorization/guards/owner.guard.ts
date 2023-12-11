@@ -26,6 +26,7 @@ export class OwnerGuard implements CanActivate {
     const { params } = context.getArgByIndex(0);
     const playlistId = params.id;
 
+    //TODO переделать проверку владельца
     const isUserOwner = user.playlist.includes(playlistId);
 
     if (!isUserOwner) {

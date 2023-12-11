@@ -5,7 +5,7 @@ import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
-import { USER_FIELDS } from '../utils/constants';
+import { USER_FIELDS, PLAYLIST_FIELDS } from '../utils/constants';
 
 @Injectable()
 export class UserService {
@@ -34,9 +34,21 @@ export class UserService {
     });
   }
 
+  async findPlaylists(id: string) {
+    return await this.userModel
+      .findById(id, { [USER_FIELDS.PLAYLIST]: 1 })
+      .populate({
+        path: USER_FIELDS.PLAYLIST,
+        populate: {
+          path: PLAYLIST_FIELDS.CREATED_BY,
+          select: USER_FIELDS.USERNAME,
+        },
+      });
+  }
+
   async addPlaylist(id: string, playlistId: string) {
     return await this.userModel.findByIdAndUpdate(id, {
-      $push: { [USER_FIELDS.PLAYLIST]: playlistId },
+      $addToSet: { [USER_FIELDS.PLAYLIST]: playlistId },
     });
   }
 

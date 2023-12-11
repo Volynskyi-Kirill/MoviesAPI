@@ -10,6 +10,7 @@ import {
   PLAYLIST_FIELDS,
   VISIBILITY_OPTIONS,
   USER_FIELDS,
+  // ERROR_MESSAGE,
 } from '../utils/constants';
 
 const POPULATE_PARAMS = {
@@ -84,4 +85,10 @@ export class PlaylistService {
   async deleteByPlaylist(title: string) {
     return await this.playlistModel.deleteMany({ title });
   }
+
+  // checkVisibility(playlist) {
+  //   if (playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE) {
+  //     throw new ForbiddenException(ERROR_MESSAGE.ACCESS_DENIED);
+  //   }
+  // }
 }

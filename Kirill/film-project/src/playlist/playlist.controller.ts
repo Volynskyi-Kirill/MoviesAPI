@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Req,
+  ForbiddenException,
 } from '@nestjs/common';
 import { PlaylistService } from './playlist.service';
 import { UserService } from '../user/user.service';
@@ -19,6 +20,7 @@ import { UserDocument } from '../user/schemas/user.schema';
 import { Request } from 'express';
 import { Public } from '../decorators/public.decorator';
 import { Owner } from '../decorators/owner.decorator';
+import { VISIBILITY_OPTIONS, ERROR_MESSAGE } from '../utils/constants';
 
 @ApiBearerAuth()
 @ApiTags('playlist')
@@ -56,45 +58,92 @@ export class PlaylistController {
   findByUser(@Req() req: Request & { user: UserDocument }) {
     const { user } = req;
     const userId = String(user?._id);
-    return this.playlistService.findByUser(userId);
+
+    return this.userService.findPlaylists(userId);
   }
 
+  @Post('my')
+  async addPlaylistToUser(
+    @Req() req: Request & { user: UserDocument },
+    @Body() payload: { playlistId: string },
+  ) {
+    const { user } = req;
+    const userId = String(user?._id);
+
+    const { playlistId } = payload;
+    const playlist = await this.playlistService.findOne(playlistId);
+
+    if (playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE) {
+      throw new ForbiddenException(ERROR_MESSAGE.ACCESS_DENIED);
+    }
+
+    this.userService.addPlaylist(userId, playlistId);
+  }
+  //Не баг, а фича :)
+  // (нет времени переписывать... Owner проверяет владельца, если список есть у юзера - значит владелец)
   @Owner()
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.playlistService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    // нужно вынести проверку на приватность в функцию
+    const playlist = await this.playlistService.findOne(id);
+
+    if (playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE) {
+      throw new ForbiddenException(ERROR_MESSAGE.ACCESS_DENIED);
+    }
+
+    return playlist;
   }
 
   @Owner()
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updatePlaylistDto: UpdatePlaylistDto,
   ) {
+    const playlist = await this.playlistService.findOne(id);
+    if (playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE) {
+      throw new ForbiddenException(ERROR_MESSAGE.ACCESS_DENIED);
+    }
+
     return this.playlistService.update(id, updatePlaylistDto);
   }
 
   @Owner()
   @Post(':id/movies')
-  addMovie(
+  async addMovie(
     @Param('id') id: string,
     @Body() addMoviePlaylistDto: AddMoviePlaylistDto,
   ) {
+    const playlist = await this.playlistService.findOne(id);
+    if (playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE) {
+      throw new ForbiddenException(ERROR_MESSAGE.ACCESS_DENIED);
+    }
+
     return this.playlistService.addMovie(id, addMoviePlaylistDto);
   }
 
   @Owner()
   @Delete(':id/movies')
-  deleteMovie(
+  async deleteMovie(
     @Param('id') id: string,
     @Body() deleteMoviePlaylistDto: DeleteMoviePlaylistDto,
   ) {
+    const playlist = await this.playlistService.findOne(id);
+    if (playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE) {
+      throw new ForbiddenException(ERROR_MESSAGE.ACCESS_DENIED);
+    }
+
     return this.playlistService.deleteMovie(id, deleteMoviePlaylistDto);
   }
 
   @Owner()
   @Delete(':id')
   async remove(@Param('id') id: string) {
+    const playlist = await this.playlistService.findOne(id);
+    if (playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE) {
+      throw new ForbiddenException(ERROR_MESSAGE.ACCESS_DENIED);
+    }
+
     const user = await this.playlistService.findOne(id);
     await this.userService.deletePlaylist(String(user?.createdBy), id);
     return await this.playlistService.remove(id);
