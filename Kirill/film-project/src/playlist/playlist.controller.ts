@@ -73,10 +73,14 @@ export class PlaylistController {
     const { playlistId } = payload;
     const playlist = await this.playlistService.findOne(playlistId);
 
-    if (playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE) {
+    const isPrivate = playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE;
+
+    if (isPrivate) {
       throw new ForbiddenException(ERROR_MESSAGE.ACCESS_DENIED);
     }
 
+    const increment = 1;
+    this.playlistService.updateEntriesCount(playlistId, increment);
     this.userService.addPlaylist(userId, playlistId);
   }
 
@@ -129,12 +133,29 @@ export class PlaylistController {
     return this.playlistService.deleteMovie(id, deleteMoviePlaylistDto);
   }
 
+  @Delete('my/:id')
+  async deletePlaylistFromUser(
+    @Param('id') id: string,
+    @Req() req: Request & { user: UserDocument },
+  ) {
+    const { user } = req;
+    const userId = String(user?._id);
+
+    const decrement = -1;
+    this.playlistService.updateEntriesCount(id, decrement);
+    this.userService.deletePlaylist(userId, id);
+  }
+
   @Owner()
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    const user = await this.playlistService.findOne(id);
+  async remove(
+    @Param('id') id: string,
+    @Req() req: Request & { user: UserDocument },
+  ) {
+    const { user } = req;
+    const userId = String(user?._id);
 
-    await this.userService.deletePlaylist(String(user?.createdBy), id);
+    await this.userService.deletePlaylist(userId, id);
 
     return await this.playlistService.remove(id);
   }

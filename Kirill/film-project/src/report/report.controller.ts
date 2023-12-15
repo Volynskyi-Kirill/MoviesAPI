@@ -16,7 +16,7 @@ import * as schedule from 'node-schedule';
 export class ReportController {
   constructor(private readonly reportService: ReportService) {}
 
-  job = schedule.scheduleJob('*/2 * * * *', async () => {
+  job = schedule.scheduleJob('*/10 * * * *', async () => {
     const createReportDto = await this.reportService.makeReport();
     this.reportService.create(createReportDto);
   });
