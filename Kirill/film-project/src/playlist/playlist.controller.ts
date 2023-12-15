@@ -62,6 +62,13 @@ export class PlaylistController {
     return this.userService.findPlaylists(userId);
   }
 
+  @Get('/popular')
+  findPopular() {
+    const sortOrder = 'descending';
+    const limit = 50;
+    return this.playlistService.findPopular(sortOrder, limit);
+  }
+
   @Post('my')
   async addPlaylistToUser(
     @Req() req: Request & { user: UserDocument },

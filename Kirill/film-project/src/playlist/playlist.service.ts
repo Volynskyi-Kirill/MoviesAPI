@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, SortOrder } from 'mongoose';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { AddMoviePlaylistDto } from './dto/add-movie-playlist.dto';
@@ -44,6 +44,13 @@ export class PlaylistService {
         [PLAYLIST_FIELDS.VISIBILITY]: VISIBILITY_OPTIONS.PUBLIC,
       })
       .populate(POPULATE_PARAMS.CREATED_BY);
+  }
+
+  async findPopular(sortOrder: SortOrder, limit: number) {
+    return this.playlistModel
+      .find()
+      .sort({ entriesCount: sortOrder })
+      .limit(limit);
   }
 
   async findByUser(createdBy: string) {
