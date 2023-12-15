@@ -29,6 +29,9 @@ export class Playlist {
     default: VISIBILITY_OPTIONS.PRIVATE,
   })
   visibility: string;
+
+  @Prop({ default: 0 })
+  entriesCount: number;
 }
 
 export const PlaylistSchema = SchemaFactory.createForClass(Playlist);

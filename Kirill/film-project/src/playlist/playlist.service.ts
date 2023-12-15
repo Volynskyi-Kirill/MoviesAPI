@@ -55,6 +55,10 @@ export class PlaylistService {
       .populate(POPULATE_PARAMS.CREATED_BY);
   }
 
+  async findById(id: string) {
+    return await this.playlistModel.findById(id);
+  }
+
   async update(id: string, updatePlaylistDto: UpdatePlaylistDto) {
     return await this.playlistModel.findByIdAndUpdate(id, updatePlaylistDto, {
       new: true,

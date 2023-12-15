@@ -79,15 +79,23 @@ export class PlaylistController {
 
     this.userService.addPlaylist(userId, playlistId);
   }
-  //Не баг, а фича :)
-  // (нет времени переписывать... Owner проверяет владельца, если список есть у юзера - значит владелец)
-  @Owner()
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    // нужно вынести проверку на приватность в функцию
-    const playlist = await this.playlistService.findOne(id);
 
-    if (playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE) {
+  @Get(':id')
+  async findOne(
+    @Param('id') id: string,
+    @Req() req: Request & { user: UserDocument },
+  ) {
+    const { user } = req;
+
+    const userId = user._id.toString();
+    const playlist = await this.playlistService.findById(id);
+    const playlistOwnerId = playlist?.createdBy.toString();
+
+    const isUserOwner = playlistOwnerId === userId;
+    const isPrivate = playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE;
+    const isAccessDenied = isPrivate && !isUserOwner;
+
+    if (isAccessDenied) {
       throw new ForbiddenException(ERROR_MESSAGE.ACCESS_DENIED);
     }
 
@@ -100,11 +108,6 @@ export class PlaylistController {
     @Param('id') id: string,
     @Body() updatePlaylistDto: UpdatePlaylistDto,
   ) {
-    const playlist = await this.playlistService.findOne(id);
-    if (playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE) {
-      throw new ForbiddenException(ERROR_MESSAGE.ACCESS_DENIED);
-    }
-
     return this.playlistService.update(id, updatePlaylistDto);
   }
 
@@ -114,11 +117,6 @@ export class PlaylistController {
     @Param('id') id: string,
     @Body() addMoviePlaylistDto: AddMoviePlaylistDto,
   ) {
-    const playlist = await this.playlistService.findOne(id);
-    if (playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE) {
-      throw new ForbiddenException(ERROR_MESSAGE.ACCESS_DENIED);
-    }
-
     return this.playlistService.addMovie(id, addMoviePlaylistDto);
   }
 
@@ -128,24 +126,16 @@ export class PlaylistController {
     @Param('id') id: string,
     @Body() deleteMoviePlaylistDto: DeleteMoviePlaylistDto,
   ) {
-    const playlist = await this.playlistService.findOne(id);
-    if (playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE) {
-      throw new ForbiddenException(ERROR_MESSAGE.ACCESS_DENIED);
-    }
-
     return this.playlistService.deleteMovie(id, deleteMoviePlaylistDto);
   }
 
   @Owner()
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    const playlist = await this.playlistService.findOne(id);
-    if (playlist?.visibility === VISIBILITY_OPTIONS.PRIVATE) {
-      throw new ForbiddenException(ERROR_MESSAGE.ACCESS_DENIED);
-    }
-
     const user = await this.playlistService.findOne(id);
+
     await this.userService.deletePlaylist(String(user?.createdBy), id);
+
     return await this.playlistService.remove(id);
   }
 }
