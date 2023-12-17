@@ -8,6 +8,7 @@ import { DB_CONNECTION_URL } from '../../config';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '../user/user.service';
+import { MailService } from '../mail/mail.service';
 
 describe('AuthorizationService', () => {
   let service: AuthorizationService;
@@ -26,6 +27,7 @@ describe('AuthorizationService', () => {
         JwtStrategy,
         ConfigService,
         UserService,
+        MailService,
       ],
     }).compile();
 

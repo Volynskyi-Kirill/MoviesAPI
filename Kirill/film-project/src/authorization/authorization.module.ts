@@ -7,7 +7,8 @@ import { User, UserSchema } from '../user/schemas/user.schema';
 import { AuthorizationService } from './authorization.service';
 import { AuthorizationController } from './authorization.controller';
 import { JwtStrategy } from './jwt.strategy';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
+import { MailService } from '../mail/mail.service';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UserService } from 'src/user/user.service';
     JwtStrategy,
     ConfigService,
     UserService,
+    MailService,
   ],
 })
 export class AuthorizationModule {}

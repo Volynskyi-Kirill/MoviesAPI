@@ -6,7 +6,7 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from '../user/schemas/user.schema';
 import { CreateAuthorizationDto } from './dto/create-authorization.dto';
 import { UpdateAuthorizationDto } from './dto/update-authorization.dto';
-import { USER_FIELDS, ERROR_MESSAGE } from '../utils/constants';
+import { USER_FIELDS } from '../utils/constants';
 
 @Injectable()
 export class AuthorizationService {
@@ -25,19 +25,10 @@ export class AuthorizationService {
     return this.jwtService.sign({ email }, { secret });
   }
 
-  async loginUser(createAuthorizationDto: CreateAuthorizationDto) {
-    const { email, password } = createAuthorizationDto;
-
-    const user = await this.userModel.find({
-      [USER_FIELDS.EMAIL]: email,
-    });
-
-    if (!user.length) throw new Error(ERROR_MESSAGE.USER_NOT_FOUND);
-
-    const userPassword = user[0].password;
-    return userPassword === password
-      ? `${email} ${password}`
-      : ERROR_MESSAGE.LOGIN_FAILED;
+  async createLink(token: string) {
+    const clientUrl = this.configService.get('CLIENT_URL');
+    const link = `${clientUrl}/auth/${token}`;
+    return `<p><a href="${link}">Войти в аккаунт</a></p>`;
   }
 
   async findUserByToken(email: string, password: string) {

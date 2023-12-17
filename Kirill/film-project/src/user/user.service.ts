@@ -5,7 +5,11 @@ import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
-import { USER_FIELDS, PLAYLIST_FIELDS } from '../utils/constants';
+import {
+  USER_FIELDS,
+  PLAYLIST_FIELDS,
+  ERROR_MESSAGE,
+} from '../utils/constants';
 
 @Injectable()
 export class UserService {
@@ -25,7 +29,11 @@ export class UserService {
   }
 
   async findByEmail(email: string) {
-    return await this.userModel.find({ email });
+    const user = await this.userModel.findOne({ email });
+
+    if (!user) throw new Error(ERROR_MESSAGE.USER_NOT_FOUND);
+
+    return user;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {

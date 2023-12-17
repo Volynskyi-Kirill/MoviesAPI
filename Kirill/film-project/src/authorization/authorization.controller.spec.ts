@@ -9,6 +9,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '../user/user.service';
+import { MailService } from '../mail/mail.service';
 
 describe('AuthorizationController', () => {
   let controller: AuthorizationController;
@@ -28,6 +29,7 @@ describe('AuthorizationController', () => {
         JwtStrategy,
         ConfigService,
         UserService,
+        MailService,
       ],
     }).compile();
 

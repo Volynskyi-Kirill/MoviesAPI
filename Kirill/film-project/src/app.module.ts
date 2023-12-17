@@ -14,6 +14,7 @@ import { JwtGuard } from './authorization/guards/jwt.guard';
 import { RolesGuard } from './authorization/guards/roles.guard';
 import { PlaylistModule } from './playlist/playlist.module';
 import { ReportModule } from './report/report.module';
+import { MailModule } from './mail/mail.module';
 
 const jwtGuard = {
   provide: APP_GUARD,
@@ -38,6 +39,7 @@ const rolesGuard = {
     UserModule,
     PlaylistModule,
     ReportModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService, jwtGuard, rolesGuard],
