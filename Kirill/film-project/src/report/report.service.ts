@@ -35,7 +35,7 @@ export class ReportService {
     return `This action updates a #${id} report`;
   }
 
-  remove(id: string) {
+  deleteById(id: string) {
     return `This action removes a #${id} report`;
   }
 

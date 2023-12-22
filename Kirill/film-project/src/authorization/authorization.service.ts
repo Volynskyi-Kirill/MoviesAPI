@@ -50,7 +50,7 @@ export class AuthorizationService {
     return `This action updates a #${id} authorization`;
   }
 
-  remove(id: string) {
+  deleteById(id: string) {
     return `This action removes a #${id} authorization`;
   }
 }

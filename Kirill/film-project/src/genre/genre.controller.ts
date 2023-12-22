@@ -8,18 +8,25 @@ import {
   Delete,
 } from '@nestjs/common';
 import { GenreService } from './genre.service';
+import { MovieService } from '../movie/movie.service';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../utils/enum';
 import { Public } from '../decorators/public.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { InjectConnection } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 
 @ApiBearerAuth()
 @ApiTags('genre')
 @Controller('genre')
 export class GenreController {
-  constructor(private readonly genreService: GenreService) {}
+  constructor(
+    private readonly genreService: GenreService,
+    private readonly movieService: MovieService,
+    @InjectConnection() private connection: mongoose.Connection,
+  ) {}
 
   @Roles(Role.Admin)
   @Post()
@@ -46,7 +53,17 @@ export class GenreController {
 
   @Roles(Role.Admin)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.genreService.remove(id);
+  async deleteById(@Param('id') id: string) {
+    const session = await this.connection.startSession();
+    session.startTransaction();
+
+    try {
+      await this.movieService.deleteGenreFromMovies(id, session);
+      await this.genreService.deleteById(id, session);
+      await session.commitTransaction();
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    }
   }
 }

@@ -155,7 +155,7 @@ export class PlaylistController {
 
   @Owner()
   @Delete(':id')
-  async remove(
+  async deleteById(
     @Param('id') id: string,
     @Req() req: Request & { user: UserDocument },
   ) {
@@ -164,6 +164,6 @@ export class PlaylistController {
 
     await this.userService.deletePlaylist(userId, id);
 
-    return await this.playlistService.remove(id);
+    return await this.playlistService.deleteById(id);
   }
 }

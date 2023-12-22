@@ -43,7 +43,7 @@ export class MailService {
     return `This action updates a #${id} mail`;
   }
 
-  remove(id: number) {
+  deleteById(id: number) {
     return `This action removes a #${id} mail`;
   }
 }

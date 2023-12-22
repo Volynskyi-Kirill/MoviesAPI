@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { Movie, MovieDocument } from './schemas/movie.schema';
 import { Genre, GenreDocument } from '../genre/schemas/genre.schema';
 import {
@@ -16,7 +16,7 @@ export class MovieService {
   constructor(
     @InjectModel(Movie.name) private movieModel: Model<MovieDocument>,
     @InjectModel(Genre.name) private genreModel: Model<GenreDocument>,
-    @InjectModel(Director.name) private directorModel: Model<DirectorDocument>,
+    // @InjectModel(Director.name) private directorModel: Model<DirectorDocument>,
   ) {}
 
   POPULATE_PARAMS = {
@@ -26,7 +26,7 @@ export class MovieService {
     },
     DIRECTOR: {
       path: MOVIE_FIELDS.DIRECTOR,
-      model: this.directorModel,
+      // model: this.directorModel,
     },
   };
 
@@ -58,7 +58,18 @@ export class MovieService {
     });
   }
 
-  async remove(id: string) {
+  async deleteGenreFromMovies(
+    genreId: string,
+    session: mongoose.mongo.ClientSession,
+  ) {
+    return await this.movieModel.updateMany(
+      {},
+      { $pull: { genre: genreId } },
+      { session },
+    );
+  }
+
+  async deleteById(id: string) {
     return await this.movieModel.findByIdAndDelete(id);
   }
 

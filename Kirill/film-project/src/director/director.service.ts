@@ -28,7 +28,7 @@ export class DirectorService {
     });
   }
 
-  async remove(id: string) {
+  async deleteById(id: string) {
     return await this.directorModel.findByIdAndDelete(id);
   }
 

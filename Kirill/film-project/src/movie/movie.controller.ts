@@ -18,12 +18,17 @@ import { HEADERS } from '../utils/constants';
 import { Public } from '../decorators/public.decorator';
 import { CACHE_KEY } from './movie.constants';
 import { movieCache, clearCache } from './movie.cache';
+import { InjectConnection } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 
 @ApiBearerAuth()
 @ApiTags('movie')
 @Controller('movie')
 export class MovieController {
-  constructor(private readonly movieService: MovieService) {}
+  constructor(
+    private readonly movieService: MovieService,
+    @InjectConnection() private connection: mongoose.Connection,
+  ) {}
 
   @Roles(Role.Admin)
   @Post()
@@ -69,8 +74,8 @@ export class MovieController {
 
   @Roles(Role.Admin)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  deleteById(@Param('id') id: string) {
     clearCache();
-    return this.movieService.remove(id);
+    return this.movieService.deleteById(id);
   }
 }

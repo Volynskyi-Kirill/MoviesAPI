@@ -94,7 +94,7 @@ export class PlaylistService {
     });
   }
 
-  async remove(id: string) {
+  async deleteById(id: string) {
     return await this.playlistModel.findByIdAndDelete(id);
   }
 

@@ -47,7 +47,7 @@ export class DirectorController {
 
   @Roles(Role.Admin)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.directorService.remove(id);
+  deleteById(@Param('id') id: string) {
+    return this.directorService.deleteById(id);
   }
 }

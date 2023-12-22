@@ -57,7 +57,7 @@ export class AuthorizationController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authorizationService.remove(id);
+  deleteById(@Param('id') id: string) {
+    return this.authorizationService.deleteById(id);
   }
 }

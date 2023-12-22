@@ -42,7 +42,7 @@ export class ReportController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.reportService.remove(id);
+  deleteById(@Param('id') id: string) {
+    return this.reportService.deleteById(id);
   }
 }

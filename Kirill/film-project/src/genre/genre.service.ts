@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { Genre, GenreDocument } from './schemas/genre.schema';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
@@ -29,8 +29,8 @@ export class GenreService {
     });
   }
 
-  async remove(id: string) {
-    return await this.genreModel.findByIdAndDelete(id);
+  async deleteById(id: string, session: mongoose.mongo.ClientSession) {
+    return await this.genreModel.findByIdAndDelete(id, { session });
   }
 
   async deleteByGenre(genre: string) {
