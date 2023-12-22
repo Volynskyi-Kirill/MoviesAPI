@@ -14,7 +14,6 @@ import { Movie, MovieSchema } from '../movie/schemas/movie.schema';
     ]),
   ],
   controllers: [GenreController],
-  // providers: [GenreService],
   providers: [GenreService, MovieService],
 })
 export class GenreModule {}

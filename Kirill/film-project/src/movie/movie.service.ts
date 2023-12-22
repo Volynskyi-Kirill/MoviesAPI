@@ -3,10 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { Movie, MovieDocument } from './schemas/movie.schema';
 import { Genre, GenreDocument } from '../genre/schemas/genre.schema';
-import {
-  Director,
-  DirectorDocument,
-} from '../director/schemas/director.schema';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MOVIE_FIELDS } from '../utils/constants';
@@ -16,7 +12,6 @@ export class MovieService {
   constructor(
     @InjectModel(Movie.name) private movieModel: Model<MovieDocument>,
     @InjectModel(Genre.name) private genreModel: Model<GenreDocument>,
-    // @InjectModel(Director.name) private directorModel: Model<DirectorDocument>,
   ) {}
 
   POPULATE_PARAMS = {
@@ -26,7 +21,6 @@ export class MovieService {
     },
     DIRECTOR: {
       path: MOVIE_FIELDS.DIRECTOR,
-      // model: this.directorModel,
     },
   };
 

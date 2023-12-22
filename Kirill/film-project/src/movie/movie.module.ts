@@ -8,9 +8,6 @@ import { Movie, MovieSchema } from './schemas/movie.schema';
 import { Genre, GenreSchema } from '../genre/schemas/genre.schema';
 import { Director, DirectorSchema } from '../director/schemas/director.schema';
 import { User, UserSchema } from '../user/schemas/user.schema';
-import { GenreService } from '../genre/genre.service';
-import { DirectorService } from '../director/director.service';
-import { UserService } from '../user/user.service';
 
 @Module({
   imports: [
@@ -24,9 +21,6 @@ import { UserService } from '../user/user.service';
   controllers: [MovieController],
   providers: [
     MovieService,
-    // GenreService,
-    // DirectorService,
-    // UserService,
     JwtService,
     ConfigService,
   ],
