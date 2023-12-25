@@ -11,7 +11,7 @@ import { DirectorService } from './director.service';
 import { CreateDirectorDto } from './dto/create-director.dto';
 import { UpdateDirectorDto } from './dto/update-director.dto';
 import { Roles } from '../decorators/roles.decorator';
-import { Role } from '../utils/enum';
+import { Role } from '../utils/enum/roles.enum';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiBearerAuth()

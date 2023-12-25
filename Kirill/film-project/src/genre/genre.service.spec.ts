@@ -22,7 +22,9 @@ describe('GenreService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         MongooseModule.forRoot(DB_CONNECTION_URL),
-        MongooseModule.forFeature([{ name: Genre.name, schema: GenreSchema }]),
+        MongooseModule.forFeature([
+          { name: Genre.name, schema: GenreSchema },
+        ]),
       ],
       providers: [GenreService],
     }).compile();

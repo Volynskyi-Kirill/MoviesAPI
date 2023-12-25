@@ -29,10 +29,14 @@ export class UserController {
   @Public()
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.userService.create(createUserDto);
+    const userId = user._id.toString();
     const token = await this.authorizationService.generateToken(
+      userId,
       createUserDto.email,
+      createUserDto.roles,
     );
-    return this.userService.create(createUserDto, token);
+    return token;
   }
 
   @Get('/me')

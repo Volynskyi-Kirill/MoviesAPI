@@ -3,6 +3,7 @@ import { MovieController } from './movie.controller';
 import { MovieService } from './movie.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
+import { AuthorizationService } from '../authorization/authorization.service';
 import { JwtService } from '@nestjs/jwt';
 import { Movie, MovieSchema } from './schemas/movie.schema';
 import { Genre, GenreSchema } from '../genre/schemas/genre.schema';
@@ -29,6 +30,7 @@ describe('MovieController', () => {
         MovieService,
         JwtService,
         ConfigService,
+        AuthorizationService,
       ],
     }).compile();
 

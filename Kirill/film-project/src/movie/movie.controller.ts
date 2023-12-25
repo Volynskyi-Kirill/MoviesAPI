@@ -7,19 +7,21 @@ import {
   Param,
   Delete,
   Headers,
+  Req,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
+import { AuthorizationService } from '../authorization/authorization.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Roles } from '../decorators/roles.decorator';
-import { Role } from '../utils/enum';
+import { Role } from '../utils/enum/roles.enum';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { HEADERS } from '../utils/constants';
 import { Public } from '../decorators/public.decorator';
 import { CACHE_KEY } from './movie.constants';
 import { movieCache, clearCache } from './movie.cache';
-import { InjectConnection } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
+import { UserDocument } from '../user/schemas/user.schema';
+import { Permissions } from '../utils/enum/permissions.enum';
 
 @ApiBearerAuth()
 @ApiTags('movie')
@@ -27,7 +29,7 @@ import mongoose from 'mongoose';
 export class MovieController {
   constructor(
     private readonly movieService: MovieService,
-    @InjectConnection() private connection: mongoose.Connection,
+    private readonly authorizationService: AuthorizationService,
   ) {}
 
   @Roles(Role.Admin)
@@ -72,9 +74,13 @@ export class MovieController {
     return this.movieService.update(id, updateMovieDto);
   }
 
-  @Roles(Role.Admin)
   @Delete(':id')
-  deleteById(@Param('id') id: string) {
+  deleteById(
+    @Param('id') id: string,
+    @Req() req: Request & { user: UserDocument },
+  ) {
+    const { user } = req;
+    this.authorizationService.can(user, Permissions.MANAGE_REVIEWS);
     clearCache();
     return this.movieService.deleteById(id);
   }

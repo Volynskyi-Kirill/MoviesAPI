@@ -1,12 +1,12 @@
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../user/schemas/user.schema';
-import { CreateAuthorizationDto } from './dto/create-authorization.dto';
-import { UpdateAuthorizationDto } from './dto/update-authorization.dto';
 import { USER_FIELDS } from '../utils/constants';
+import { Permissions } from '../utils/enum/permissions.enum';
+import { RolePermissions } from '../utils/enum/rolePermissions.enum';
 
 @Injectable()
 export class AuthorizationService {
@@ -16,13 +16,9 @@ export class AuthorizationService {
     private configService: ConfigService,
   ) {}
 
-  create(createAuthorizationDto: CreateAuthorizationDto) {
-    return 'This action adds a new authorization';
-  }
-
-  generateToken(email: string) {
+  generateToken(id: string, email: string, roles: string[]) {
     const secret = this.configService.get('JWT_SECRET');
-    return this.jwtService.sign({ email }, { secret });
+    return this.jwtService.sign({ id, email, roles }, { secret });
   }
 
   async createLink(token: string) {
@@ -38,19 +34,11 @@ export class AuthorizationService {
     });
   }
 
-  findAll() {
-    return `This action returns all authorization`;
-  }
-
-  findOne(id: string) {
-    return `This action returns a #${id} authorization`;
-  }
-
-  update(id: string, updateAuthorizationDto: UpdateAuthorizationDto) {
-    return `This action updates a #${id} authorization`;
-  }
-
-  deleteById(id: string) {
-    return `This action removes a #${id} authorization`;
+  can(user: UserDocument, permissions: Permissions) {
+    const result = user.roles.some((role) =>
+      RolePermissions[role].includes(permissions),
+    );
+    if (!result) throw new ForbiddenException();
+    return result;
   }
 }
