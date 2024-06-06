@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { MovieModule } from './movie/movie.module';
 import { GenreModule } from './genre/genre.module';
 import { DirectorModule } from './director/director.module';
@@ -41,7 +39,6 @@ const rolesGuard = {
     ReportModule,
     MailModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, jwtGuard, rolesGuard],
+  providers: [jwtGuard, rolesGuard],
 })
 export class AppModule {}
